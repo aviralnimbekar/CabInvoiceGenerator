@@ -7,10 +7,19 @@ public class CabInvoiceGenTest {
 
     @Test
     void givenDistanceAndTime_ShouldReturnTotalFare() {
-        int time = 5;
-        double distance = 2.0;
         CabInvoiceGen cabInvoiceGen = new CabInvoiceGen();
-        double fare = cabInvoiceGen.fareCalculator(distance, time);
+        double distance = 2.0;
+        int time = 5;
+        double fare = cabInvoiceGen.calculateFare(distance,time);
         Assertions.assertEquals(25, fare);
+    }
+
+    @Test
+    void givenLessDistanceAndTime_ShouldReturnMinimumFare() {
+        CabInvoiceGen cabInvoiceGen = new CabInvoiceGen();
+        double distance = 0.1;
+        int time = 1;
+        double minFare = cabInvoiceGen.calculateFare(distance,time);
+        Assertions.assertEquals(5, minFare);
     }
 }
