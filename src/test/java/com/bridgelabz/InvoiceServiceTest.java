@@ -4,18 +4,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 public class InvoiceServiceTest {
     InvoiceService invoiceService;
-    ArrayList<Ride> rides = new ArrayList<>();
-
+    Ride[] rides;
     @BeforeEach
     void toCreateInstanceOfCabInvoiceGenBeforeRunningTests() {
         invoiceService = new InvoiceService();
-        rides.add(new Ride(2.0, 5));
-        rides.add(new Ride(0.1, 1));
-        rides.add(new Ride(1.0, 5));
+        rides = new Ride[] {new Ride(2.0, 5),
+                            new Ride(0.1, 1),
+                            new Ride(1.0, 5),
+        };
     }
 
     @Test
@@ -44,31 +42,9 @@ public class InvoiceServiceTest {
     @Test
     void givenUserIdAndRides_ShouldReturnInvoiceSummaryOfTheUserId() {
         String userId = "a@b.com";
-        Ride newRide = new Ride(1, 5);
-        InvoiceSummary actualSummary = invoiceService.calculateFare(userId, rides, newRide);
-        InvoiceSummary expectedSummary = new InvoiceSummary(4, 60);
+        invoiceService.addRide(userId, rides);
+        InvoiceSummary actualSummary = invoiceService.getInvoiceSummary(userId);
+        InvoiceSummary expectedSummary = new InvoiceSummary(3, 45);
         Assertions.assertEquals(expectedSummary, actualSummary);
-    }
-
-    @Test
-    void givenExistingUserIdAndRide_ShouldReturnInvoiceSummaryOfTheUserId() {
-        String userId = "a@b.com";
-        invoiceService.putInMap(userId, rides);
-        Ride newRide = new Ride(1, 5);
-        InvoiceSummary actualSummary = invoiceService.calculateFare(userId, rides, newRide);
-        InvoiceSummary expectedSummary = new InvoiceSummary(4, 60);
-        Assertions.assertEquals(expectedSummary, actualSummary);
-    }
-
-    @Test
-    void givenExistingUserIdAndMultipleRides_ShouldReturnInvoiceSummaryOfTheUserId() {
-        String userId = "a@b.com";
-        invoiceService.putInMap(userId, rides);
-        Ride newRide1 = new Ride(1, 5);
-        Ride newRide2 = new Ride(0.1, 1);
-        InvoiceSummary actualSummary = invoiceService.calculateFare(userId, rides, newRide1);
-        InvoiceSummary updatedActualSummary = invoiceService.calculateFare(userId, rides, newRide2);
-        InvoiceSummary expectedSummary = new InvoiceSummary(5, 65);
-        Assertions.assertEquals(expectedSummary, updatedActualSummary);
     }
 }

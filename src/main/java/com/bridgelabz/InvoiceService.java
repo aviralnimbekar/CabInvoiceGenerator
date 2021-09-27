@@ -1,8 +1,6 @@
 package com.bridgelabz;
 
-import java.util.ArrayList;
-
-import static com.bridgelabz.RideRepo.userDetail;
+import java.util.Arrays;
 
 public class InvoiceService {
 
@@ -10,28 +8,26 @@ public class InvoiceService {
     private static final int COST_PER_TIME = 1;
     private static final double MINIMUM_FARE = 5.0;
 
+    RideRepository rideRepository = new RideRepository();
 
     public double calculateFare(double distance, int time) {
         double fare = COST_PER_KM * distance + COST_PER_TIME * time;
         return Math.max(fare, MINIMUM_FARE);
     }
 
-    public InvoiceSummary calculateFare(ArrayList<Ride> rides) {
-        double totalFare = rides.stream()
-                                .mapToDouble(ride -> calculateFare(ride.distance, ride.time))
-                                .sum();
-        return new InvoiceSummary(rides.size(), totalFare);
+    public InvoiceSummary calculateFare(Ride[] rides) {
+        double totalFare = Arrays.stream(rides)
+                                 .mapToDouble(ride -> calculateFare(ride.distance, ride.time))
+                                 .sum();
+        return new InvoiceSummary(rides.length, totalFare);
     }
 
-    public InvoiceSummary calculateFare(String userId, ArrayList<Ride> rideList, Ride newRide) {
-        if (userDetail.containsKey(userId))
-            rideList = userDetail.get(userId);
-        rideList.add(newRide);
-        userDetail.put(userId, rideList);
-        return calculateFare(rideList);
+    public void addRide(String userId, Ride[] rides) {
+        rideRepository.addRide(userId, rides);
     }
 
-    public void putInMap(String userId, ArrayList<Ride> rides) {
-        userDetail.put(userId, rides);
+    public InvoiceSummary getInvoiceSummary(String userId) {
+        Ride[] rides = rideRepository.getList(userId).toArray(new Ride[0]);
+        return calculateFare(rides);
     }
 }
