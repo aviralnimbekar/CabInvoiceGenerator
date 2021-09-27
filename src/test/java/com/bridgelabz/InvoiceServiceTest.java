@@ -59,4 +59,16 @@ public class InvoiceServiceTest {
         InvoiceSummary expectedSummary = new InvoiceSummary(4, 60);
         Assertions.assertEquals(expectedSummary, actualSummary);
     }
+
+    @Test
+    void givenExistingUserIdAndMultipleRides_ShouldReturnInvoiceSummaryOfTheUserId() {
+        String userId = "a@b.com";
+        invoiceService.putInMap(userId, rides);
+        Ride newRide1 = new Ride(1, 5);
+        Ride newRide2 = new Ride(0.1, 1);
+        InvoiceSummary actualSummary = invoiceService.calculateFare(userId, rides, newRide1);
+        InvoiceSummary updatedActualSummary = invoiceService.calculateFare(userId, rides, newRide2);
+        InvoiceSummary expectedSummary = new InvoiceSummary(5, 65);
+        Assertions.assertEquals(expectedSummary, updatedActualSummary);
+    }
 }
