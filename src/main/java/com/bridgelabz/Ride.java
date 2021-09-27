@@ -1,10 +1,12 @@
 package com.bridgelabz;
 
 public class Ride {
-    final double distance;
-    final int time;
+    double distance;
+    double time;
+    RideCategory category;
 
-    public Ride(double distance, int time) {
+    public Ride(RideCategory category, double distance, double time) {
+        this.category = category;
         this.distance = distance;
         this.time = time;
     }

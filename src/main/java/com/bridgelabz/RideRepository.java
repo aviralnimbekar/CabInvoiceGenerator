@@ -13,8 +13,8 @@ public class RideRepository {
         if (rideList == null)
             userDetail.put(userId, new ArrayList<>(Arrays.asList(rides)));
         else {
-            userDetail.get(userId)
-                      .addAll(Arrays.asList(rides));
+            rideList.addAll(Arrays.asList(rides));
+            userDetail.put(userId, rideList);
         }
     }
 
