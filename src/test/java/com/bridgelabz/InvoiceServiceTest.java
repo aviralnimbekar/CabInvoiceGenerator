@@ -72,4 +72,15 @@ public class InvoiceServiceTest {
         InvoiceSummary expectedSummary = new InvoiceSummary(5, 65);
         Assertions.assertEquals(expectedSummary, actualSummary);
     }
+
+    @Test
+    void givenUserId_WhenNonExisting_ShouldReturnUserIdNotFoundException() {
+        String userId = "c@d.com";
+        try {
+            InvoiceSummary actualSummary = invoiceService.getInvoiceSummary(userId);
+        }catch (UserIdNotFoundException e) {
+            Assertions.assertEquals(UserIdNotFoundException.ExceptionType.NOT_FOUND, e.type);
+            System.out.println(e.getMessage());
+        }
+    }
 }

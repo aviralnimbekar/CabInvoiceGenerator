@@ -18,7 +18,11 @@ public class RideRepository {
         }
     }
 
-    public ArrayList<Ride> getList(String userId) {
-        return userDetail.get(userId);
+    public Ride[] getList(String userId) {
+        try {
+            return userDetail.get(userId).toArray(new Ride[0]);
+        } catch (NullPointerException e) {
+            throw new UserIdNotFoundException(UserIdNotFoundException.ExceptionType.NOT_FOUND, "USER ID NOT FOUND!!!");
+        }
     }
 }

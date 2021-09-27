@@ -27,7 +27,7 @@ public class InvoiceService {
     }
 
     public InvoiceSummary getInvoiceSummary(String userId) {
-        Ride[] rides = rideRepository.getList(userId).toArray(new Ride[0]);
+        Ride[] rides = rideRepository.getList(userId);
         return calculateFare(rides);
     }
 }
