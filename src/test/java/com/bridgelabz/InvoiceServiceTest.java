@@ -6,10 +6,16 @@ import org.junit.jupiter.api.Test;
 
 public class InvoiceServiceTest {
     InvoiceService invoiceService;
+    Ride[] rides;
 
     @BeforeEach
     void toCreateInstanceOfCabInvoiceGenBeforeRunningTests() {
         invoiceService = new InvoiceService();
+        rides = new Ride[]{
+                new Ride(2.0, 5),
+                new Ride(0.1, 1),
+                new Ride(1.0, 5),
+        };
     }
 
     @Test
@@ -30,10 +36,6 @@ public class InvoiceServiceTest {
 
     @Test
     void givenMultipleDistanceAndTime_WhenCalculated_ShouldReturnInvoiceSummary() {
-        Ride[] rides = {new Ride(2.0, 5),
-                        new Ride(0.1, 1),
-                        new Ride(1.0, 5),
-        };
         InvoiceSummary actualSummary = invoiceService.calculateFare(rides);
         InvoiceSummary expectedSummary = new InvoiceSummary(3, 45);
         Assertions.assertEquals(expectedSummary, actualSummary);
@@ -42,11 +44,8 @@ public class InvoiceServiceTest {
     @Test
     void givenUserIdAndRides_ShouldReturnInvoiceSummaryOfTheUserId() {
         String userId = "a@b.com";
-        Ride[] rides = {new Ride(2.0, 5),
-                        new Ride(0.1, 1),
-                        new Ride(1.0, 5),
-        };
-        InvoiceSummary actualSummary = invoiceService.calculateFare(userId, rides);
+        invoiceService.addToList(userId, rides);
+        InvoiceSummary actualSummary = invoiceService.calculateFare(userId);
         InvoiceSummary expectedSummary = new InvoiceSummary(3, 45);
         Assertions.assertEquals(expectedSummary, actualSummary);
     }

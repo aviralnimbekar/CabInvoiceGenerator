@@ -1,15 +1,15 @@
 package com.bridgelabz;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+
+import static com.bridgelabz.RideRepo.userDetail;
 
 public class InvoiceService {
 
     private static final double COST_PER_KM = 10.0;
     private static final int COST_PER_TIME = 1;
     private static final double MINIMUM_FARE = 5.0;
-    private final Map<String, Ride[]> userDetail = new HashMap<>();
+    RideRepo rideRepo = new RideRepo();
 
     public double calculateFare(double distance, int time) {
         double fare = COST_PER_KM * distance + COST_PER_TIME * time;
@@ -23,13 +23,12 @@ public class InvoiceService {
         return new InvoiceSummary(rides.length, totalFare);
     }
 
-    public InvoiceSummary calculateFare(String userId, Ride[] rides) {
-        addToList(userId, rides);
+    public InvoiceSummary calculateFare(String userId) {
         Ride[] ridesOfId = userDetail.get(userId);
         return calculateFare(ridesOfId);
     }
 
     public void addToList(String userId, Ride[] rides) {
-        userDetail.put(userId, rides);
+        rideRepo.addToList(userId, rides);
     }
 }
