@@ -78,4 +78,17 @@ public class InvoiceServiceTest {
         InvoiceSummary expectedSummary = new InvoiceSummary(3, 85);
         Assertions.assertEquals(expectedSummary, actualSummary);
     }
+
+    @Test
+    void givenDistanceAndTime_WhenCalculatedAsPerCategory_ShouldReturnInvoiceSummary() {
+        rides = new Ride[]{new Ride(RideCategory.NORMAL, 2.0, 5),
+                new Ride(RideCategory.PREMIUM, 0.1, 1),
+                new Ride(RideCategory.NORMAL, 1.0, 5),
+                new Ride(RideCategory.PREMIUM, 1.0, 5),
+        };
+        invoiceService.addRide(userId, rides);
+        InvoiceSummary actualSummary = invoiceService.getInvoiceSummary(userId);
+        InvoiceSummary expectedSummary = new InvoiceSummary(4, 85);
+        Assertions.assertEquals(expectedSummary, actualSummary);
+    }
 }
