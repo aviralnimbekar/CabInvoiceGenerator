@@ -4,18 +4,18 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 public class InvoiceServiceTest {
     InvoiceService invoiceService;
-    Ride[] rides;
+    ArrayList<Ride> rides = new ArrayList<>();
 
     @BeforeEach
     void toCreateInstanceOfCabInvoiceGenBeforeRunningTests() {
         invoiceService = new InvoiceService();
-        rides = new Ride[]{
-                new Ride(2.0, 5),
-                new Ride(0.1, 1),
-                new Ride(1.0, 5),
-        };
+        rides.add(new Ride(2.0, 5));
+        rides.add(new Ride(0.1, 1));
+        rides.add(new Ride(1.0, 5));
     }
 
     @Test
@@ -44,9 +44,19 @@ public class InvoiceServiceTest {
     @Test
     void givenUserIdAndRides_ShouldReturnInvoiceSummaryOfTheUserId() {
         String userId = "a@b.com";
-        invoiceService.addToList(userId, rides);
-        InvoiceSummary actualSummary = invoiceService.calculateFare(userId);
-        InvoiceSummary expectedSummary = new InvoiceSummary(3, 45);
+        Ride newRide = new Ride(1, 5);
+        InvoiceSummary actualSummary = invoiceService.calculateFare(userId, rides, newRide);
+        InvoiceSummary expectedSummary = new InvoiceSummary(4, 60);
+        Assertions.assertEquals(expectedSummary, actualSummary);
+    }
+
+    @Test
+    void givenExistingUserIdAndRide_ShouldReturnInvoiceSummaryOfTheUserId() {
+        String userId = "a@b.com";
+        invoiceService.putInMap(userId, rides);
+        Ride newRide = new Ride(1, 5);
+        InvoiceSummary actualSummary = invoiceService.calculateFare(userId, rides, newRide);
+        InvoiceSummary expectedSummary = new InvoiceSummary(4, 60);
         Assertions.assertEquals(expectedSummary, actualSummary);
     }
 }
