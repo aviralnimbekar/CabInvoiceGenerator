@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Test;
 public class InvoiceServiceTest {
     InvoiceService invoiceService;
     Ride[] rides;
+
     @BeforeEach
     void toCreateInstanceOfCabInvoiceGenBeforeRunningTests() {
         invoiceService = new InvoiceService();
-        rides = new Ride[] {new Ride(2.0, 5),
-                            new Ride(0.1, 1),
-                            new Ride(1.0, 5),
+        rides = new Ride[]{new Ride(2.0, 5),
+                new Ride(0.1, 1),
+                new Ride(1.0, 5),
         };
     }
 
@@ -49,13 +50,26 @@ public class InvoiceServiceTest {
     }
 
     @Test
-    void givenExistingUserIdAndRide_ShouldReturnUpdatedInvoiceSummaryOfTheUserId() {
+    void givenExistingUserIdAndRide_ShouldReturnUpdatedInvoiceSummary() {
         String userId = "a@b.com";
         invoiceService.addRide(userId, rides);
         Ride[] newRide = {new Ride(0.1, 1)};
         invoiceService.addRide(userId, newRide);
         InvoiceSummary actualSummary = invoiceService.getInvoiceSummary(userId);
         InvoiceSummary expectedSummary = new InvoiceSummary(4, 50);
+        Assertions.assertEquals(expectedSummary, actualSummary);
+    }
+
+    @Test
+    void givenExistingUserIdAndMultipleRides_ShouldReturnUpdatedInvoiceSummary() {
+        String userId = "a@b.com";
+        invoiceService.addRide(userId, rides);
+        Ride[] newRide1 = {new Ride(0.1, 1)};
+        invoiceService.addRide(userId, newRide1);
+        Ride[] newRide2 = {new Ride(1, 5)};
+        invoiceService.addRide(userId, newRide2);
+        InvoiceSummary actualSummary = invoiceService.getInvoiceSummary(userId);
+        InvoiceSummary expectedSummary = new InvoiceSummary(5, 65);
         Assertions.assertEquals(expectedSummary, actualSummary);
     }
 }
