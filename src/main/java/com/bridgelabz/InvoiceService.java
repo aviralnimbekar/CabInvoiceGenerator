@@ -3,7 +3,11 @@ package com.bridgelabz;
 import java.util.Arrays;
 
 public class InvoiceService {
-    private final RideRepository rideRepository = new RideRepository();
+    private final RideRepository rideRepository;
+
+    public InvoiceService(RideRepository rideRepository) {
+        this.rideRepository = rideRepository;
+    }
 
     public InvoiceSummary calculateFare(Ride[] rides) {
         double totalFare = Arrays.stream(rides)
